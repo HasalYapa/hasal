@@ -111,7 +111,7 @@ export function Navbar() {
       {/* Mobile Navigation with Sidebar */}
       <div className="md:hidden">
         <Sidebar open={isOpen} setOpen={setIsOpen}>
-          <SidebarBody className="justify-between gap-10">
+          <SidebarBody className="justify-between gap-10 !bg-black [&>div]:!bg-black">
             {/* Mobile Header */}
             <div className="h-16 px-4 py-4 flex flex-row md:hidden items-center justify-between bg-black border-b border-white w-full">
               <Link href="/" className="flex items-center space-x-2">
