@@ -92,7 +92,7 @@ export function Footer() {
 
         <div className="border-t mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
-            © 2024 Your Name. All rights reserved.
+            © 2024 Hasal Dimantha. All rights reserved.
           </p>
           <div className="flex space-x-4 mt-4 sm:mt-0">
             <Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">

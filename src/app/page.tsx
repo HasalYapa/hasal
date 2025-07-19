@@ -4,10 +4,10 @@ import React from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import Link from "next/link"
 import { ArrowRight, Github, ExternalLink } from "lucide-react"
+import Spline from '@splinetool/react-spline'
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { GoogleGeminiEffect } from "@/components/ui/google-gemini-effect"
 import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card"
 
 // Sample featured projects data
@@ -42,30 +42,12 @@ const featuredProjects = [
 ]
 
 export default function HomePage() {
-  const ref = React.useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-
-  const pathLengthFirst = useTransform(scrollYProgress, [0, 0.8], [0.2, 1.2]);
-  const pathLengthSecond = useTransform(scrollYProgress, [0, 0.8], [0.15, 1.2]);
-  const pathLengthThird = useTransform(scrollYProgress, [0, 0.8], [0.1, 1.2]);
-  const pathLengthFourth = useTransform(scrollYProgress, [0, 0.8], [0.05, 1.2]);
-  const pathLengthFifth = useTransform(scrollYProgress, [0, 0.8], [0, 1.2]);
-  
-  // Hide buttons when scrolling past hero section (25% of the way through)
-  const [showButtons, setShowButtons] = React.useState(true);
-  
   // Check if mobile navbar is open
   const [isMobileNavOpen, setIsMobileNavOpen] = React.useState(false);
   
-  React.useEffect(() => {
-    const unsubscribe = scrollYProgress.on("change", (latest) => {
-      setShowButtons(latest < 0.25);
-    });
-    return () => unsubscribe();
-  }, [scrollYProgress]);
+  // Scroll detection for button visibility
+  const [isHeroVisible, setIsHeroVisible] = React.useState(true);
+  const { scrollY } = useScroll();
 
   React.useEffect(() => {
     // Listen for mobile navbar state changes
@@ -80,43 +62,50 @@ export default function HomePage() {
     };
   }, []);
 
+  React.useEffect(() => {
+    // Hide buttons when scrolling past hero section (viewport height)
+    const unsubscribe = scrollY.on("change", (latest) => {
+      const heroHeight = window.innerHeight * 0.8; // 80% of viewport height
+      setIsHeroVisible(latest < heroHeight);
+    });
+
+    return () => unsubscribe();
+  }, [scrollY]);
+
   return (
     <div className="min-h-screen">
-      {/* Hero Section with Gemini Effect */}
-      <section ref={ref} className="relative h-[400vh] bg-black w-full dark:border dark:border-white/[0.1] overflow-clip">
-        {/* Gemini Effect Background */}
-        <GoogleGeminiEffect
-          title=""
-          description=""
-          pathLengths={[
-            pathLengthFirst,
-            pathLengthSecond,
-            pathLengthThird,
-            pathLengthFourth,
-            pathLengthFifth,
-          ]}
-        />
+      {/* Hero Section with Spline 3D Scene */}
+      <section className="relative h-screen bg-black w-full dark:border dark:border-white/[0.1] overflow-hidden">
+        {/* Spline 3D Background */}
+        <div className="absolute inset-0 spline-container">
+          <Spline className="absolute inset-0 transform scale-125 md:scale-150 xl:scale-175"
+            scene="https://prod.spline.design/5Vp04oZEY9rFbzZH/scene.splinecode"
+          />
+          {/* Overlay to hide background text */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-transparent pointer-events-none"></div>
+        </div>
         
-        {/* Fixed Action Buttons */}
-        {showButtons && !isMobileNavOpen && (
-          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
-            <div className="text-center">
+        {/* Hero Content */}
+        {!isMobileNavOpen && isHeroVisible && (
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-full">
+            <div className="text-center max-w-6xl mx-auto px-4 sm:px-6">
+              
               {/* Hero Title */}
               <motion.h1
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 px-4"
+                className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 leading-tight"
               >
                 Full-Stack Developer
               </motion.h1>
-              
+
               {/* Hero Description */}
               <motion.p
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-6 sm:mb-8 px-4"
+                className="text-xs xs:text-sm sm:text-base md:text-lg text-gray-300 mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed px-2"
               >
                 I create amazing digital experiences with modern technologies. 
                 Passionate about clean code, user experience, and solving complex problems.
@@ -125,16 +114,16 @@ export default function HomePage() {
               {/* Action Buttons */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4"
+                animate={{ opacity: isHeroVisible ? 1 : 0, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.4 }}
+                className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-2 sm:px-4 max-w-md sm:max-w-none mx-auto"
               >
-                <Button asChild size="lg" className="bg-white text-black hover:bg-gray-200 shadow-lg w-full sm:w-auto">
+                <Button asChild size="default" className="bg-white text-black hover:bg-gray-200 shadow-lg w-full sm:w-auto text-sm sm:text-base py-2 sm:py-3 px-6 sm:px-8">
                   <Link href="/projects">
                     View My Work
                   </Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-black shadow-lg w-full sm:w-auto">
+                <Button asChild variant="outline" size="default" className="border-white text-white hover:bg-white hover:text-black shadow-lg w-full sm:w-auto text-sm sm:text-base py-2 sm:py-3 px-6 sm:px-8">
                   <Link href="/contact">
                     Get In Touch
                   </Link>

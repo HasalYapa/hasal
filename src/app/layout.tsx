@@ -9,22 +9,22 @@ import { Footer } from "@/components/footer"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Your Name - Full Stack Developer",
+  title: "Hasal Dimantha - Full Stack Developer",
   description: "Full-stack developer passionate about creating amazing digital experiences. Skilled in React, Next.js, Node.js, and more.",
   keywords: ["developer", "full-stack", "react", "nextjs", "nodejs", "typescript"],
-  authors: [{ name: "Your Name" }],
-  creator: "Your Name",
+  authors: [{ name: "Hasal Dimantha" }],
+  creator: "Hasal Dimantha",
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://yourwebsite.com",
-    title: "Your Name - Full Stack Developer",
+    title: "Hasal Dimantha - Full Stack Developer",
     description: "Full-stack developer passionate about creating amazing digital experiences.",
-    siteName: "Your Name Portfolio",
+    siteName: "Hasal Dimantha Portfolio",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Your Name - Full Stack Developer",
+    title: "Hasal Dimantha - Full Stack Developer",
     description: "Full-stack developer passionate about creating amazing digital experiences.",
     creator: "@yourusername",
   },
